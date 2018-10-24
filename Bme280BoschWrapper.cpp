@@ -44,11 +44,15 @@ bool Bme280BoschWrapper::beginSPI(int8_t cspin)
 bool Bme280BoschWrapper::measure()
 {
   int8_t ret = BME280_OK;
+  uint8_t reg_data=0x08;
 
   if(forced)
   {
     setSensorSettings();
-    bme280.delay_ms(255);
+    while(reg_data & 0x08){ 
+      I2CRead(bme280.dev_id, 0xF3, &reg_data, 1);
+     bme280.delay_ms(1);
+    }
     ret += bme280_get_sensor_data(BME280_PRESS | BME280_HUM | BME280_TEMP, &comp_data, &bme280);
   }
   else
