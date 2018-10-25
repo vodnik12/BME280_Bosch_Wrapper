@@ -49,10 +49,18 @@ bool Bme280BoschWrapper::measure()
   if(forced)
   {
     setSensorSettings();
-    while(reg_data & 0x08){ 
-      I2CRead(bme280.dev_id, 0xF3, &reg_data, 1);
-     bme280.delay_ms(1);
-    }
+    for(uint8_t i=0;i<255;i++){
+      if(bme280.intf == BME280_I2C_INTF){
+        I2CRead(bme280.dev_id, 0xF3, &reg_data, 1); 
+      }
+      else{
+        SPIRead(bme280.dev_id, 0xF3, &reg_data, 1);
+      }
+      if(reg_data & 0x08){
+        break;
+      }
+      bme280.delay_ms(1);
+    }     
     ret += bme280_get_sensor_data(BME280_PRESS | BME280_HUM | BME280_TEMP, &comp_data, &bme280);
   }
   else
