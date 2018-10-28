@@ -56,7 +56,7 @@ bool Bme280BoschWrapper::measure()
       else{
         SPIRead(bme280.dev_id, 0xF3, &reg_data, 1);
       }
-      if(reg_data & 0x08){
+      if(!(reg_data & 0x08)){
         break;
       }
       bme280.delay_ms(1);
