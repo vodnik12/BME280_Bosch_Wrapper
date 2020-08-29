@@ -10,7 +10,7 @@ class Bme280BoschWrapper
     //false: uses continuous measuring mode
     Bme280BoschWrapper(bool forcedMode);
 
-    bool beginI2C(uint8_t dev_addr = 0x77);
+    bool beginI2C(uint8_t dev_addr = 0x77, int sda = SDA, int scl = SCL);
     bool beginSPI(int8_t cspin);
 
     //this method performs measurement
@@ -27,10 +27,10 @@ class Bme280BoschWrapper
     uint32_t getPressure();
 
   private:
-    void I2CInit();
+    void I2CInit(int sda, int scl);
     void SPIInit();
     int8_t setSensorSettings();
-  
+
     static int8_t I2CRead(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint16_t cnt);
     static int8_t I2CWrite(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint16_t cnt);
     static int8_t SPIRead(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint16_t cnt);
